@@ -4,8 +4,10 @@ import './App.css';
 
 import Polls from './Components/Polls.js'
 import AddPoll from './Components/AddPoll.js'
+import Twitter from './Components/Twitter.js'
 
 var $ = require('jquery');
+//var fetch = require('isomorphic-fetch');
 
 class App extends Component {
   constructor(){
@@ -14,9 +16,10 @@ class App extends Component {
     
     //  Fetch polls from database
     var fetchedPolls = [];
+    
     $.ajax({
       type: 'GET',
-      url: 'https://late-night-react-sefields.c9users.io:8081/getpolls',
+      url: '/getpolls',
       dataType: 'json'
     }).done(function(data) {
       fetchedPolls = data;
@@ -40,7 +43,7 @@ class App extends Component {
     //  Add the new poll to the database
     $.ajax({
       type: 'POST',
-      url: 'https://late-night-react-sefields.c9users.io:8081/writepoll',
+      url: '/writepoll',
       data: newPoll,
       dataType: 'json'
     });
@@ -62,17 +65,38 @@ class App extends Component {
     
     $.ajax({
       type: 'POST',
-      url: 'https://late-night-react-sefields.c9users.io:8081/castvote',
+      url: '/castvote',
       data: polls[index],
       dataType: 'json'
     });
   }
   
+  handleDeletePoll(index) {
+    let polls = this.state.polls;
+    
+    $.ajax({
+      type: 'POST',
+      url: '/deletepoll',
+      data: polls[index],
+      dataType: 'json'
+    }).done(function(data) {
+      console.log(data);
+    });
+    
+    polls.splice(index, 1);
+    this.setState(
+      {
+        polls: polls
+      }  
+    );
+  }
+  
   render() {
     return (
       <div className="App">
-        <Polls polls={this.state.polls} castVote={this.handleCastVote.bind(this)}/>
+        <Polls polls={this.state.polls} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
         <AddPoll addPoll={this.handleAddPoll.bind(this)}/>
+        <Twitter />
       </div>
     );
   }

@@ -6,9 +6,13 @@ class Polls extends Component {
         this.props.castVote(selectionIndex, index);
     }
     
+    handleDeletePoll(index) {
+        this.props.deletePoll(index);
+    }
+    
     renderPoll(poll, index) {
         return (
-            <PollItem poll={poll} index={index} castVote={this.handleCastVote.bind(this)}/>
+            <PollItem poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
         )
     }
     

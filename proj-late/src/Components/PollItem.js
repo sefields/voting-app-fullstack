@@ -33,6 +33,10 @@ class PollItem extends Component {
         )
     }
     
+    handleDeletePoll = (index) => (e) => {
+        this.props.deletePoll(index);
+    }
+    
     render() {
         //  Declare an array to hold our choice elements
         let choiceElements;
@@ -49,7 +53,7 @@ class PollItem extends Component {
                 <hr />
                 <form onSubmit = {this.handleCastVote.bind(this)}>
                     {/*<h3>Id:{this.props.poll.id}</h3>*/}
-                    <h3>Q: {this.props.poll.question}</h3>
+                    <h3>Q: {this.props.poll.question} <a href="#" onClick={this.handleDeletePoll(this.props.index)}>X</a></h3>
                     {choiceElements}
                     <input type="submit" value="Submit" />
                 </form>

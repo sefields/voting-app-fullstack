@@ -6,7 +6,7 @@ class AddPoll extends Component {
         super();
         this.state = { newPoll: {
             question: null,
-            choiceArr: Array(2).fill(null)
+            choiceArr: Array(2).fill('')
             //If you're looking for 'voteArr', it gets tacked on in App.js
             }
         }
@@ -16,7 +16,7 @@ class AddPoll extends Component {
     //  These blanks are then turned into text inputs in render()
     handleAddChoice(e) {
         let choiceArr = this.state.newPoll.choiceArr;
-        choiceArr.push(null);
+        choiceArr.push('');
         this.setState({
             newPoll: {
                 question: this.state.newPoll.question,
@@ -28,22 +28,26 @@ class AddPoll extends Component {
     
     //  This pushes a new poll up to App.js
     handleAddPoll(e) {
+        let currChoices = this.state.newPoll.choiceArr;
         if (this.refs.question.value === '')
         {
             alert('Must provide a question!')
         }
-        else {
-            this.setState({
-                newPoll: {
-                    question: this.refs.question.value,
-                    choiceArr: this.state.newPoll.choiceArr
-                }
-            }, function() {
-                // console.log("ADDPOLL.JS:");
-                // console.log(this.state);
-                this.props.addPoll(this.state.newPoll);
-            });
+        for (var i = 0; i < currChoices.length; i++) {
+            if (currChoices[i] !== '') continue;
+            else {
+                alert('Must input text for every choice!');
+                return;
+            }
         }
+        this.setState({
+            newPoll: {
+                question: this.refs.question.value, //This is grabbed from question field
+                choiceArr: currChoices //This doesn't change
+            }
+        }, function() {
+            this.props.addPoll(this.state.newPoll);
+        });
         e.preventDefault();
     }
     

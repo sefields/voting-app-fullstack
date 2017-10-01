@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PollChoice from './PollChoice.js';
 
 class AddPoll extends Component {
     constructor() {
@@ -48,11 +49,11 @@ class AddPoll extends Component {
     
     //  This gets called whenever a text input is changed (see render())
     //  And updates the state
-    handleChoiceChange = (index) => (e) => {
+    handleChoiceChange = (index, textValue) => {
         //  Grab all our choices
         let choiceArr = this.state.newPoll.choiceArr;
         //  Plug in the one that was changed
-        choiceArr[index] = e.target.value;
+        choiceArr[index] = textValue;
         //  Set the state
         this.setState({
             newPoll: {
@@ -87,11 +88,11 @@ class AddPoll extends Component {
     }
     
     render() {
-        // Pull all the choices from the state...
         let choiceElements;
         choiceElements = this.state.newPoll.choiceArr.map((choice, index) => {
-            //... and turn them into JSX elements
-            return this.renderChoice(index);
+           return (
+               <PollChoice key={index} index={index} choiceChange={this.handleChoiceChange}/>
+           )
         });
         
         return (

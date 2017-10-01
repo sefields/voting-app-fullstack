@@ -28,7 +28,7 @@ class AddPoll extends Component {
     
     //  This pushes a new poll up to App.js
     handleAddPoll(e) {
-        if (this.refs.question === '')
+        if (this.refs.question.value === '')
         {
             alert('Must provide a question!')
         }

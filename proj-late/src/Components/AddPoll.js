@@ -81,13 +81,13 @@ class AddPoll extends Component {
         return (
             <div>
                 <label>Choice</label><input type="text" value={textValue} onChange={this.handleChoiceChange(index)}/>
-                <a href="#" onClick={this.handleDeleteChoice(index)}>X</a><br />
+                <button onClick={this.handleDeleteChoice(index)}>X</button><br />
             </div>
         )
     }
     
     render() {
-        //  Pull all the choices from the state...
+        // Pull all the choices from the state...
         let choiceElements;
         choiceElements = this.state.newPoll.choiceArr.map((choice, index) => {
             //... and turn them into JSX elements

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Chart from './Chart.js'
 
 class PollItem extends Component {
     constructor() {
@@ -53,10 +54,11 @@ class PollItem extends Component {
                 <hr />
                 <form onSubmit = {this.handleCastVote.bind(this)}>
                     {/*<h3>Id:{this.props.poll.id}</h3>*/}
-                    <h3>Q: {this.props.poll.question} <a href="#" onClick={this.handleDeletePoll(this.props.index)}>X</a></h3>
+                    <h3>Q: {this.props.poll.question} <button onClick={this.handleDeletePoll(this.props.index)}>X</button></h3>
                     {choiceElements}
                     <input type="submit" value="Submit" />
                 </form>
+                <Chart poll={this.props.poll}/>
             </div>
         )
     }

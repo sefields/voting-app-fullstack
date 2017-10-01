@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 
 import Polls from './Components/Polls.js'
@@ -28,7 +28,7 @@ class App extends Component {
       })
     }.bind(this));
     
-    //  This is essentially setting 'polls' to [] since the API
+    //  This is essentially setting 'polls' to [] since the server
     //  call most likely hasn't responded yet.
     //  Not sure of the most elegant way to write this.
     this.state = {
@@ -38,7 +38,7 @@ class App extends Component {
   
   handleAddPoll(newPoll) {
     //  Add a spot for votes
-    newPoll.voteArr = Array(newPoll.choiceArr.length).fill(0);
+    newPoll.voteArr = Array(newPoll.choiceArr.length).fill("0");
     
     //  Add the new poll to the database
     $.ajax({
@@ -58,7 +58,8 @@ class App extends Component {
   
   handleCastVote(selectionIndex, index){
     let polls = this.state.polls;
-    polls[index].voteArr[selectionIndex] = parseInt(polls[index].voteArr[selectionIndex]) + 1;
+    //  Vote counts are stored as strings, hence the length of this line
+    polls[index].voteArr[selectionIndex] = (parseInt(polls[index].voteArr[selectionIndex], 10) + 1).toString();
     this.setState({
       polls: polls
     });

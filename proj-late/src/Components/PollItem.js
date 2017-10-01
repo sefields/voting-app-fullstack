@@ -27,7 +27,7 @@ class PollItem extends Component {
     
     renderChoice(choice, index) {
         return(
-            <div>
+            <div key={index}>
                 <input type="radio" name="temp" onClick={this.handleSelectionChange(index)}/> 
                 <label> {choice} - Votes: {this.props.poll.voteArr[index]}</label>
             </div>

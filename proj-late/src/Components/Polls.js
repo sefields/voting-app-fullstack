@@ -12,7 +12,7 @@ class Polls extends Component {
     
     renderPoll(poll, index) {
         return (
-            <PollItem poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
+            <PollItem key={index} poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
         )
     }
     

@@ -18,7 +18,7 @@ class Chart extends Component {
                     ],
                     borderWidth: 1
                 }]
-            }        
+            }
         }
     }
     
@@ -40,15 +40,17 @@ class Chart extends Component {
     renderNoVotes() {
         return (
                 <div>
-                    No votes yet!
+                    <br/>
+                        No votes yet!
+                    <br/>
                 </div>
         )
     }
     
     render() {
         var divStyle = {
-            width: 300,
-            height: 300
+            width: 250,
+            height: 'auto'
         };
 
         var voteArr = this.state.data.datasets[0].data;

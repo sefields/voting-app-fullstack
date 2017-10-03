@@ -10,7 +10,7 @@ class AddPollChoice extends Component {
     render() {
         return (
             <div>
-                <label>Choice</label><input ref={ (input) => {this.textInput = input} } type="text" onChange={this.handleChoiceChange(this.props.index)}/>
+                <label>Choice</label> <input ref={ (input) => {this.textInput = input} } type="text" onChange={this.handleChoiceChange(this.props.index)}/>
             </div>
         )
     }

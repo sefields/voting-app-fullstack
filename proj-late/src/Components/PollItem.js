@@ -50,12 +50,11 @@ class PollItem extends Component {
         //  Return a form with the question and choiceElements! This constitutes a PollItem
         return (
             <div>
-                <hr />
                 <form onSubmit = {this.handleCastVote.bind(this)}>
                     {/*<h3>Id:{this.props.poll.id}</h3>*/}
-                    <h3>Q: {this.props.poll.question} <button onClick={this.handleDeletePoll(this.props.index)}>X</button></h3>
+                    <h4><button className="btn" onClick={this.handleDeletePoll(this.props.index)}>X</button> Q: {this.props.poll.question}</h4>
                     {choiceElements}
-                    <input type="submit" value="Submit" />
+                    <input type="submit" className="btn" value="Submit" />
                 </form>
             </div>
         )

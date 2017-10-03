@@ -101,10 +101,9 @@ class AddPoll extends Component {
         
         return (
             <div>
-                <hr/>
                 <h3>Add Poll</h3>
                 <form onSubmit={this.handleAddPoll.bind(this)}>
-                    <label>Question</label><input type="text" ref="question"/><br/>
+                    <label>Question</label> <input type="text" ref="question"/><br/>
                     {choiceElements}
                     <input type="submit" value="Submit" />
                 </form>

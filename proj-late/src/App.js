@@ -13,7 +13,6 @@ class App extends Component {
   constructor(){
     super();
     
-    
     //  Fetch polls from database
     var fetchedPolls = [];
     
@@ -96,7 +95,9 @@ class App extends Component {
     return (
       <div className="App">
         <Polls polls={this.state.polls} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
+        <br/>
         <AddPoll addPoll={this.handleAddPoll.bind(this)}/>
+        <br/>
         <Twitter />
       </div>
     );

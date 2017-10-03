@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Chart from './Chart.js'
 
 class PollItem extends Component {
     constructor() {
@@ -58,7 +57,6 @@ class PollItem extends Component {
                     {choiceElements}
                     <input type="submit" value="Submit" />
                 </form>
-                <Chart poll={this.props.poll}/>
             </div>
         )
     }

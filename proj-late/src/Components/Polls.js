@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PollItem from './PollItem';
+import Chart from './Chart.js';
 
 class Polls extends Component {
     handleCastVote(selectionIndex, index) {
@@ -12,7 +13,10 @@ class Polls extends Component {
     
     renderPoll(poll, index) {
         return (
-            <PollItem key={index} poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
+            <div>
+                <PollItem key={index} poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
+                <Chart poll={poll} />
+            </div>
         )
     }
     

@@ -53,7 +53,7 @@ class Chart extends Component {
 
         var voteArr = this.state.data.datasets[0].data;
         for (var i = 0; i < voteArr.length; i++) {
-            if (voteArr[i] == "0") continue;
+            if (voteArr[i] === "0") continue;
             else {
                 return (
                     <center>

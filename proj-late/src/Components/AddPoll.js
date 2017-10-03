@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PollChoice from './PollChoice.js';
+import AddPollChoice from './AddPollChoice.js';
 
 class AddPoll extends Component {
     constructor() {
@@ -95,7 +95,7 @@ class AddPoll extends Component {
         let choiceElements;
         choiceElements = this.state.newPoll.choiceArr.map((choice, index) => {
            return (
-               <PollChoice key={index} index={index} choiceChange={this.handleChoiceChange}/>
+               <AddPollChoice key={index} index={index} choiceChange={this.handleChoiceChange}/>
            )
         });
         

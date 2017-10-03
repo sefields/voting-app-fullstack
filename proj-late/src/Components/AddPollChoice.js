@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Choice extends Component {
+class AddPollChoice extends Component {
     
     handleChoiceChange = (index) => (e) => {
         let textValue = (this.textInput.value) ? this.textInput.value : "";
@@ -16,4 +16,4 @@ class Choice extends Component {
     }
 }
 
-export default Choice
+export default AddPollChoice

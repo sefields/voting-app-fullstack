@@ -49,7 +49,7 @@ class Chart extends Component {
     
     render() {
         var divStyle = {
-            width: 250,
+            width: 300,
             height: 'auto'
         };
 

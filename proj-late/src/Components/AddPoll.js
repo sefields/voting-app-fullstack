@@ -28,6 +28,9 @@ class AddPoll extends Component {
     
     //  This pushes a new poll up to App.js
     handleAddPoll(e) {
+        //Prevents page reload
+        e.preventDefault();
+        
         let currChoices = this.state.newPoll.choiceArr;
         if (this.refs.question.value === '')
         {
@@ -48,7 +51,6 @@ class AddPoll extends Component {
         }, function() {
             this.props.addPoll(this.state.newPoll);
         });
-        e.preventDefault();
     }
     
     //  This gets called whenever a text input is changed (see render())

@@ -11,7 +11,8 @@
     "express-session": "^1.15.6",
     "mongodb": "^2.2.31",
     "passport": "^0.4.0",
-    "passport-twitter": "^1.0.4"
+    "passport-twitter": "^1.0.4",
+    "react-jss": "^7.2.0"
   },
   "devDependencies": {},
   "scripts": {

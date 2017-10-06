@@ -4,7 +4,8 @@ import './App.css';
 
 import Polls from './Components/Polls.js'
 import AddPoll from './Components/AddPoll.js'
-import Twitter from './Components/Twitter.js'
+import Login from './Components/Login.js'
+import User from './Components/User.js'
 
 var $ = require('jquery');
 //var fetch = require('isomorphic-fetch');
@@ -15,7 +16,6 @@ class App extends Component {
     
     //  Fetch polls from database
     var fetchedPolls = [];
-    
     $.ajax({
       type: 'GET',
       url: '/getpolls',
@@ -23,15 +23,32 @@ class App extends Component {
     }).done(function(data) {
       fetchedPolls = data;
       this.setState({
-       polls: fetchedPolls 
+        polls: fetchedPolls,
+        user: this.state.user
       })
+    }.bind(this));
+    
+    //  See if user is logged in w/ Google
+    var fetchedUser = null;
+    $.ajax({
+      type: 'GET',
+      url: '/getuser',
+      dataType: 'json'
+    }).done(function(data) {
+      fetchedUser = data;
+      this.setState({
+        polls: this.state.polls,
+        user: fetchedUser
+      })
+      console.log(this.state);
     }.bind(this));
     
     //  This is essentially setting 'polls' to [] since the server
     //  call most likely hasn't responded yet.
     //  Not sure of the most elegant way to write this.
     this.state = {
-      polls: fetchedPolls
+      polls: fetchedPolls,
+      user: fetchedUser
     }
   }
   
@@ -98,7 +115,8 @@ class App extends Component {
         <br/>
         <AddPoll addPoll={this.handleAddPoll.bind(this)}/>
         <br/>
-        <Twitter />
+        <Login />
+        <User user={this.state.user}/>
       </div>
     );
   }

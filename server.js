@@ -7,28 +7,35 @@ var bodyParser = require('body-parser');
 var mongo = require('mongodb').MongoClient;
 var session = require('express-session');
 
-//  Configure MongoDB
 require('dotenv').config();
-var dbURL = process.env.MONGO_URI;
 
-//  Configure Passport
 var passport = require('passport');
-var Strategy = require('passport-twitter').Strategy;
-passport.use(new Strategy({
-  consumerKey : process.env.TWITTER_KEY,
-  consumerSecret : process.env.TWITTER_SECRET,
-  callbackURL : process.env.TWITTER_CALLBACK_URL
-}, function(token, tokenSecret, profile, callback) {
-  return callback(null, profile);
-}));
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var user = null;
 
-passport.serializeUser(function(user, callback) {
-  callback(null, user);
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function(obj, callback) {
-  callback(null, obj);
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
 });
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_ID,
+  clientSecret: process.env.GOOGLE_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  passReqToCallback:true
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+    process.nextTick(function() {
+      return done(null, profile);  
+    });
+  }
+));
+
+//  Configure MongoDB
+var dbURL = process.env.MONGO_URI;
 
 var app = express();
 // we've started you off with Express, 
@@ -46,21 +53,42 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(session({ secret: 'whatever', resave: true, saveUninitialized: true}));
+app.use(session({ 
+  secret: 'whatever',
+  resave: true, 
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//  Watch this: https://www.youtube.com/watch?v=_6QrV5pneSY
-app.get("/", function(req, res) {
-  console.log("user" + req.user);
+app.use("/", function(req, res, next) {
+  if (req.user) {
+    user = req.user;
+    console.log(user);
+  }
+  next();
 });
 
-app.get("/twitter/login", passport.authenticate('twitter'));
+app.use("/", express.static('proj-late/build'));
 
-app.get("/twitter/return", passport.authenticate('twitter', {
-  failureRedirect: 'https://late-night-react-sefields.c9users.io'
-}), function (req, res) {
-  res.redirect('https://late-night-react-sefields.c9users.io');
+app.get('/auth/google', passport.authenticate('google', {scope: [
+  'https://www.googleapis.com/auth/plus.login',
+  'https://www.googleapis.com/auth/plus.profile.emails.read']
+}));
+
+app.get('/auth/google/callback',
+  passport.authenticate( 'google', {
+    successRedirect: '/',
+    failureRedirect: 'https://google.com'
+  }));
+  
+app.get("/getuser", function(req, res) {
+  if (user) {
+    res.send(user);
+  }
+  else {
+    res.send(null);
+  }
 });
 
 app.get("/getpolls", function(req, res) {
@@ -108,6 +136,6 @@ app.post("/deletepoll", function(req, res) {
 });
 
 // listen for requests :)
-var listener = app.listen(8081, function () {
+var listener = app.listen(8080, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });

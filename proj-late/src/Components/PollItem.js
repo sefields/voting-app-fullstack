@@ -9,13 +9,13 @@ class PollItem extends Component {
     }
     
     handleCastVote(e) {
+        e.preventDefault();
         if (this.state.selectedIndex === null) {
             alert("You forgot to make a selection for this poll!");
         }
         else {
             this.props.castVote(this.state.selectedIndex, this.props.index);
         }
-        e.preventDefault();
     }
     
     handleSelectionChange = (index) => (e) => {

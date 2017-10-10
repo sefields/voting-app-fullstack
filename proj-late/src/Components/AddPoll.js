@@ -69,9 +69,12 @@ class AddPoll extends Component {
         });
     }
     
-    handleDeleteChoice = (index) => (e) => {
+    handleDeleteChoice = (index) => {
         let choiceArr = this.state.newPoll.choiceArr;
-        console.log("Removing " + choiceArr[index]);
+        if (choiceArr.length <= 2) {
+            alert("At least 2 choices are required!");
+            return;
+        }
         choiceArr.splice(index, 1);
         this.setState({
             newPoll: {
@@ -79,7 +82,6 @@ class AddPoll extends Component {
                 choiceArr: choiceArr
             }
         });
-        console.log(this.state.newPoll.choiceArr);
     }
     
     renderChoice(index) {
@@ -97,7 +99,7 @@ class AddPoll extends Component {
         let choiceElements;
         choiceElements = this.state.newPoll.choiceArr.map((choice, index) => {
            return (
-               <AddPollChoice key={index} index={index} choiceChange={this.handleChoiceChange}/>
+               <AddPollChoice key={index} index={index} choice={choice} choiceChange={this.handleChoiceChange} deleteChoice={this.handleDeleteChoice}/>
            )
         });
         

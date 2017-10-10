@@ -20,7 +20,15 @@ const Item = styled.div`
 `
 
 const Button = styled.div`
-    margin: 10px 0 10px 0;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 0 10px 0;
+    background-color: lightgray;
+    border-radius: 10px;
+    width: 50%;
+    cursor: pointer;
+    cursor: hand;
 `
 
 class PollListing extends Component {
@@ -50,7 +58,7 @@ class PollListing extends Component {
     renderButton() {
         return (
                 <Button>
-                    <button className="btn" onClick={this.handleClick.bind(this)}>Q: {this.props.poll.question} </button>
+                    <div onClick={this.handleClick.bind(this)}>Q: {this.props.poll.question} </div>
                 </Button>
         )
     }

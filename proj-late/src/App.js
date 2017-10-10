@@ -109,11 +109,19 @@ class App extends Component {
   }
   
   render() {
+    let addPollComponent = null;
+    if (this.state.user) {
+      addPollComponent = <AddPoll addPoll={this.handleAddPoll.bind(this)}/>
+    }
+    else {
+      addPollComponent = <div>Log in to add polls!</div>;
+    }
+    
     return (
       <div className="App">
         <Polls polls={this.state.polls} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
         <br/>
-        <AddPoll addPoll={this.handleAddPoll.bind(this)}/>
+        {addPollComponent}
         <br/>
         <Login />
         <User user={this.state.user}/>

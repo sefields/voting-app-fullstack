@@ -69,7 +69,7 @@ app.use("/", function(req, res, next) {
   next();
 });
 
-//app.use("/", express.static('proj-late/build'));
+app.use("/", express.static('proj-late/build'));
 
 app.get('/auth/google', passport.authenticate('google', {scope: [
   'https://www.googleapis.com/auth/plus.login',
@@ -136,6 +136,6 @@ app.post("/deletepoll", function(req, res) {
 });
 
 // listen for requests :)
-var listener = app.listen(8081, function () {
+var listener = app.listen(8080, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });

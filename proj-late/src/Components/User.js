@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class User extends Component {
     render() {
+        console.log(this.props.user);
         if (this.props.user) {
             return (
                 <div>

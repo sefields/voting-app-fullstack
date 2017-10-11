@@ -14,21 +14,15 @@ class App extends Component {
   constructor(){
     super();
     
-    //  Fetch polls from database
-    var fetchedPolls = [];
-    $.ajax({
-      type: 'GET',
-      url: '/getpolls',
-      dataType: 'json'
-    }).done(function(data) {
-      fetchedPolls = data;
-      this.setState({
-        polls: fetchedPolls,
-        user: this.state.user
-      })
-    }.bind(this));
+    this.state = {
+      polls: [],
+      user: null
+    }
     
-    //  See if user is logged in w/ Google
+  }
+  
+  componentDidMount() {
+    //  Ajax call: is user logged in w/ Google?
     var fetchedUser = null;
     $.ajax({
       type: 'GET',
@@ -43,13 +37,19 @@ class App extends Component {
       console.log(this.state);
     }.bind(this));
     
-    //  This is essentially setting 'polls' to [] since the server
-    //  call most likely hasn't responded yet.
-    //  Not sure of the most elegant way to write this.
-    this.state = {
-      polls: fetchedPolls,
-      user: fetchedUser
-    }
+    // Ajax call: fetch polls from db
+    var fetchedPolls = [];
+    $.ajax({
+      type: 'GET',
+      url: '/getpolls',
+      dataType: 'json'
+    }).done(function(data) {
+      fetchedPolls = data;
+      this.setState({
+        polls: fetchedPolls,
+        user: this.state.user
+      })
+    }.bind(this));
   }
   
   handleAddPoll(newPoll) {

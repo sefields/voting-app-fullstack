@@ -115,13 +115,27 @@ app.post("/writepoll", function(req, res) {
   });
 });
 
+//  CastVote route does the following:
+//  1. Update a document in place with a new voteArr
+//  2. When the step above is finished, return all polls
+//  Why: The database is our source of truth.
+//  Once a set of polls is delivered to the app,
+//  it divides things up from there (i.e. based on User)
 app.post("/castvote", function(req, res) {
   var payloadPoll = req.body;
   mongo.connect(dbURL, function(err, db) {
     if (err) throw err;
     var pollCollection = db.collection("polls");
-    pollCollection.update({ "question" : payloadPoll.question }, { $set : { voteArr : payloadPoll.voteArr} } );
-    db.close();
+    //  Update, in place, the poll that we've voted on.
+    pollCollection.update({ "question" : payloadPoll.question },
+                          { $set : { voteArr : payloadPoll.voteArr} }
+                          , function() { // When the update completes, return the new set of polls
+                              pollCollection.find({}, { _id : 0 }).toArray(function(err, docs) {
+                                if (err) throw err;
+                                res.send(docs);
+                                db.close();
+                              });
+                          } );
   });
 });
 

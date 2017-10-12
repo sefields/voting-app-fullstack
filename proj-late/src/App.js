@@ -106,36 +106,46 @@ class App extends Component {
     //  Vote counts are stored as strings, hence the length of this line
     polls[index].voteArr[selectionIndex] = (parseInt(polls[index].voteArr[selectionIndex], 10) + 1).toString();
     
-    this.setState({
-      polls: polls,
-      myPolls: this.state.myPolls,
-      user: this.state.user
-    });
+    var fetchedPolls = [];
+    var myFetchedPolls = [];
     
     $.ajax({
       type: 'POST',
       url: '/castvote',
       data: polls[index],
       dataType: 'json'
-    }).done(this.fetchPolls());
+    }).done(function(data) {
+          fetchedPolls = data;
+          myFetchedPolls = this.queryUserPolls(fetchedPolls);
+          this.setState({
+            polls: fetchedPolls,
+            myPolls: this.queryUserPolls(fetchedPolls),
+            user: this.state.user
+          });
+        }.bind(this));
   }
   
   handleCastVoteOnMyPoll(selectionIndex, index) {
     let myPolls = this.state.myPolls;
     myPolls[index].voteArr[selectionIndex] = (parseInt(myPolls[index].voteArr[selectionIndex], 10) + 1).toString();
     
-    this.setState({
-      polls: this.state.polls,
-      myPolls: myPolls,
-      user: this.state.user
-    });
+    var fetchedPolls = [];
+    var myFetchedPolls = [];
     
     $.ajax({
       type: 'POST',
       url: '/castvote',
       data: myPolls[index],
       dataType: 'json'
-    }).done(this.fetchPolls());
+    }).done(function(data) {
+          fetchedPolls = data;
+          myFetchedPolls = this.queryUserPolls(fetchedPolls);
+          this.setState({
+            polls: fetchedPolls,
+            myPolls: this.queryUserPolls(fetchedPolls),
+            user: this.state.user
+          });
+        }.bind(this));
   }
   
   handleDeletePoll(index) {

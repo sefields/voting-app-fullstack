@@ -120,7 +120,7 @@ app.post("/castvote", function(req, res) {
   mongo.connect(dbURL, function(err, db) {
     if (err) throw err;
     var pollCollection = db.collection("polls");
-    pollCollection.replaceOne({ "question" : payloadPoll.question }, payloadPoll);
+    pollCollection.update({ "question" : payloadPoll.question }, { $set : { voteArr : payloadPoll.voteArr} } );
     db.close();
   });
 });

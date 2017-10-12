@@ -3,19 +3,17 @@ import PollItem from './PollItem';
 import Chart from './Chart.js';
 import styled from 'styled-components';
 
-const Left = styled.div`
-    float: left;
-    margin: 40px 0 40px 50px;
-`
-
-const Right = styled.div`
-    margin: 50px 100px 50px 360px;
+const SubItem = styled.div`
+    width: 50%;
+    display: inline-block;
 `
 
 const Item = styled.div`
-    border: 1px solid lightGray;
+    width: 75%;
+    border: 2px solid floralwhite;
     border-radius: 5px;
-    margin: 10px 0 10px 0;
+    margin: auto;
+    margin-bottom: 10px;
     overflow: auto;
 `
 
@@ -24,7 +22,7 @@ const Button = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px 0 10px 0;
-    background-color: lightgray;
+    background-color: floralwhite;
     border-radius: 10px;
     width: 50%;
     cursor: pointer;
@@ -66,12 +64,12 @@ class PollListing extends Component {
     renderPoll(poll, index) {
         return (
             <Item>
-                <Left>
+                <SubItem>
                     <PollItem key={index} poll={poll} index={index} castVote={this.handleCastVote.bind(this)} deletePoll={this.handleDeletePoll.bind(this)}/>
-                </Left>
-                <Right>
+                </SubItem>
+                <SubItem>
                     <Chart poll={poll} />
-                </Right>
+                </SubItem>
             </Item>
         )
     }

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 
 class User extends Component {
     render() {
-        console.log(this.props.user);
         if (this.props.user) {
             return (
                 <div>
-                    <h4>Logged in: {this.props.user.displayName}</h4>
+                    <h4>Logged in:</h4>
+                    <h3>{this.props.user.displayName}</h3>
                 </div>
             )  
         } 
         else {
             return (
-                <div>
+                <h3>
                     Not logged in!
-                </div>
+                </h3>
             )
         }
     }

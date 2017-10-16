@@ -9,8 +9,7 @@ import User from './Components/User.js'
 import Tabs from './Components/Tabs.js'
 import Pane from './Components/Pane.js'
 
-var $ = require('jquery');
-//var fetch = require('isomorphic-fetch');
+import api from './Utils/api.js'
 
 class App extends Component {
   
@@ -44,8 +43,8 @@ class App extends Component {
     
     //  Invent dummy user
     var dummyUser = {
-      id: "0",
-      displayName: "Rick"
+      id: "1337",
+      displayName: "Spongebob"
     };
     
     //  All we set here is the user
@@ -60,112 +59,77 @@ class App extends Component {
   }
   
   fetchPolls() {
-    // Ajax call: fetch polls from db
-    var fetchedPolls = [];
-    var myFetchedPolls = [];
-    $.ajax({
-      type: 'GET',
-      url: '/getpolls',
-      dataType: 'json'
-    }).done(function(data) {
-      fetchedPolls = data;
-      myFetchedPolls = this.queryUserPolls(fetchedPolls);
-      console.log("User polls include:");
-      console.log(myFetchedPolls);
-      this.setState({
-        polls: fetchedPolls,
-        myPolls: this.queryUserPolls(fetchedPolls),
-        user: this.state.user
-      });
-    }.bind(this));
+    
+    api.getPolls()
+      .then(function(fetchedPolls) {
+        this.setState({
+          polls: fetchedPolls,
+          myPolls: this.queryUserPolls(fetchedPolls),
+          user: this.state.user
+        });
+      }.bind(this));
+      
   }
   
   handleAddPoll(newPoll) {
-    //  Add a spot for votes
+    //  Add fields for votes and for user
     newPoll.voteArr = Array(newPoll.choiceArr.length).fill("0");
     newPoll.googleID = this.state.user.id;
     
-    //  Add the new poll to the database
-    $.ajax({
-      type: 'POST',
-      url: '/writepoll',
-      data: newPoll,
-      dataType: 'json'
-    });
-    
-    //  Update the state of the app with the new poll
-    let polls = this.state.polls;
-    polls.push(newPoll);
-    this.setState({
-      polls: polls
-    });
+    //  Add the new poll to db, then update state from db
+    api.writePoll(newPoll)
+      .then(function (fetchedPolls) {
+        this.updateState(fetchedPolls);
+      }.bind(this));
   }
   
   handleCastVote(selectionIndex, index){
+    //  Voting from the "Latest Polls" tab, using that list
     let polls = this.state.polls;
     //  Vote counts are stored as strings, hence the length of this line
     polls[index].voteArr[selectionIndex] = (parseInt(polls[index].voteArr[selectionIndex], 10) + 1).toString();
     
-    var fetchedPolls = [];
-    var myFetchedPolls = [];
-    
-    $.ajax({
-      type: 'POST',
-      url: '/castvote',
-      data: polls[index],
-      dataType: 'json'
-    }).done(function(data) {
-          fetchedPolls = data;
-          myFetchedPolls = this.queryUserPolls(fetchedPolls);
-          this.setState({
-            polls: fetchedPolls,
-            myPolls: this.queryUserPolls(fetchedPolls),
-            user: this.state.user
-          });
-        }.bind(this));
+    api.castVote(polls[index])
+      .then(function (fetchedPolls) {
+          this.updateState(fetchedPolls);
+      }.bind(this));
   }
   
   handleCastVoteOnMyPoll(selectionIndex, index) {
+    //  Voting from the "My Polls" tab, using that list
     let myPolls = this.state.myPolls;
     myPolls[index].voteArr[selectionIndex] = (parseInt(myPolls[index].voteArr[selectionIndex], 10) + 1).toString();
     
-    var fetchedPolls = [];
-    var myFetchedPolls = [];
-    
-    $.ajax({
-      type: 'POST',
-      url: '/castvote',
-      data: myPolls[index],
-      dataType: 'json'
-    }).done(function(data) {
-          fetchedPolls = data;
-          myFetchedPolls = this.queryUserPolls(fetchedPolls);
-          this.setState({
-            polls: fetchedPolls,
-            myPolls: this.queryUserPolls(fetchedPolls),
-            user: this.state.user
-          });
-        }.bind(this));
+    api.castVote(myPolls[index])
+      .then(function (fetchedPolls) {
+          this.updateState(fetchedPolls);
+      }.bind(this));
   }
   
   handleDeletePoll(index) {
     let polls = this.state.polls;
     
-    $.ajax({
-      type: 'POST',
-      url: '/deletepoll',
-      data: polls[index],
-      dataType: 'json'
-    }).done(function(data) {
-      console.log(data);
-    });
+    api.deletePoll(polls[index])
+      .then(function(fetchedPolls) {
+        this.updateState(fetchedPolls);
+      }.bind(this));
+  }
+  
+  handleDeleteMyPoll(index) {
+    let myPolls = this.state.myPolls;
     
-    polls.splice(index, 1);
-    this.setState(
-      {
-        polls: polls
-      }  
-    );
+    api.deletePoll(myPolls[index])
+      .then(function(fetchedPolls) {
+        this.updateState(fetchedPolls);
+      }.bind(this));
+  }
+  
+  updateState(fetchedPolls) {
+    this.setState({
+            polls: fetchedPolls,
+            myPolls: this.queryUserPolls(fetchedPolls),
+            user: this.state.user
+          });
   }
   
   queryUserPolls(polls) {
@@ -187,7 +151,7 @@ class App extends Component {
       
       myPollsComponent = <Polls polls={this.state.myPolls} 
               castVote={this.handleCastVoteOnMyPoll.bind(this)} 
-              deletePoll={this.handleDeletePoll.bind(this)}/>
+              deletePoll={this.handleDeleteMyPoll.bind(this)}/>
     }
     else {
       addPollComponent = <h3>Log in to add polls!</h3>;

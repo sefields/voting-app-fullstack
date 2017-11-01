@@ -5,7 +5,7 @@ class AddPoll extends Component {
     constructor() {
         super();
         this.state = { newPoll: {
-            question: null,
+            question: '',
             choiceArr: Array(2).fill('')
             //If you're looking for 'voteArr', it gets tacked on in App.js
             }
@@ -32,7 +32,7 @@ class AddPoll extends Component {
         e.preventDefault();
         
         let currChoices = this.state.newPoll.choiceArr;
-        if (this.refs.question.value === '')
+        if (this.state.newPoll.question.value === '')
         {
             alert('Must provide a question!')
         }
@@ -43,14 +43,22 @@ class AddPoll extends Component {
                 return;
             }
         }
+        this.props.addPoll(this.state.newPoll);
         this.setState({
             newPoll: {
-                question: this.refs.question.value, //This is grabbed from question field
-                choiceArr: currChoices //This doesn't change
+                question: '',
+                choiceArr: Array(2).fill('')
             }
-        }, function() {
-            this.props.addPoll(this.state.newPoll);
         });
+    }
+    
+    handleQuestionChange = (e) => {
+        this.setState({
+            newPoll: {
+                question: e.target.value,
+                choiceArr: this.state.newPoll.choiceArr
+            }
+        })
     }
     
     //  This gets called whenever a text input is changed (see render())
@@ -107,7 +115,7 @@ class AddPoll extends Component {
             <div>
                 <h3>Add Poll</h3>
                 <form onSubmit={this.handleAddPoll.bind(this)}>
-                    <label>Question</label> <input type="text" ref="question"/><br/>
+                    <label>Question</label> <input type="text" onChange={this.handleQuestionChange} value={this.state.newPoll.question} /><br/>
                     {choiceElements}
                     <input type="submit" value="Submit" />
                 </form>

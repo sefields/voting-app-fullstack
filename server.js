@@ -110,8 +110,13 @@ app.post("/writepoll", function(req, res) {
   mongo.connect(dbURL, function(err, db) {
     if (err) throw err;
     var pollCollection = db.collection("polls");
-    pollCollection.insert(payloadPoll);
-    db.close();
+    pollCollection.insert(payloadPoll, {}, function() { // Once we write the new poll, return all polls
+                              pollCollection.find({}, { _id : 0 }).toArray(function(err, docs) {
+                                if (err) throw err;
+                                res.send(docs);
+                                db.close();
+                              });
+                          });
   });
 });
 
@@ -144,8 +149,14 @@ app.post("/deletepoll", function(req, res) {
   mongo.connect(dbURL, function(err, db) {
     if (err) throw err;
     var pollCollection = db.collection("polls");
-    pollCollection.deleteOne({ "question" : payloadPoll.question });
-    db.close();
+    pollCollection.deleteOne({ "question" : payloadPoll.question },
+                            function() { // When the delete completes, return the new set of polls
+                              pollCollection.find({}, { _id : 0 }).toArray(function(err, docs) {
+                                if (err) throw err;
+                                res.send(docs);
+                                db.close();
+                              });
+                          });
   });
 });
 

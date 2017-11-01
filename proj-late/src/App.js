@@ -62,11 +62,7 @@ class App extends Component {
     
     api.getPolls()
       .then(function(fetchedPolls) {
-        this.setState({
-          polls: fetchedPolls,
-          myPolls: this.queryUserPolls(fetchedPolls),
-          user: this.state.user
-        });
+        this.updateState(fetchedPolls);
       }.bind(this));
       
   }

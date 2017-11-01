@@ -34,6 +34,7 @@ class PollItem extends Component {
     }
     
     handleDeletePoll = (index) => (e) => {
+        e.preventDefault();
         this.props.deletePoll(index);
     }
     
